@@ -1,24 +1,36 @@
 package angel_beer
 
 import (
+	"bytes"
 	"fmt"
-	"net/http"
 	"io"
+	"net/http"
 )
 
-func NewModel(){
-    fmt.Println("model")
+func NewModel() {
+	fmt.Println("model")
 	h1 := func(w http.ResponseWriter, _ *http.Request) {
 		io.WriteString(w, "Hello from a HandleFunc #1!\n")
 	}
-	h2 := func(w http.ResponseWriter, _ *http.Request) {
-		io.WriteString(w, "Hello from a HandleFunc #2!\n")
+
+	h3 := func(w http.ResponseWriter, _ *http.Request) {
+
 	}
 
 	http.HandleFunc("/", h1)
-	http.HandleFunc("/endpoint", h2)
-	http.ListenAndServe(":8080",nil)
+	http.HandleFunc("/supervisor", SupervisorRequest)
+	http.HandleFunc("/agent", h3)
+	http.ListenAndServe(":8080", nil)
 }
 
+func SupervisorRequest(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodPost {
+		body := r.Body
+		defer body.Close()
 
+		buf := new(bytes.Buffer)
+		io.Copy(buf, body)
 
+		fmt.Println(string(buf.Bytes()))
+	}
+}
