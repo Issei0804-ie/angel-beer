@@ -1,4 +1,4 @@
-package github.com/Issei0804-ie/angel-beer
+package angel_beer
 
 import "fmt"
 
