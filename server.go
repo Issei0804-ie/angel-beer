@@ -3,9 +3,21 @@ package angel_beer
 import (
 	"bytes"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"io"
 	"net/http"
+	"os"
 )
+
+func init() {
+	// Log as JSON instead of the default ASCII formatter.
+	log.SetFormatter(&log.JSONFormatter{})
+
+	// Output to stdout instead of the default stderr
+	// Can be any io.Writer, see below for File example
+	log.SetOutput(os.Stdout)
+	log.SetLevel(log.DebugLevel)
+}
 
 func NewModel() {
 	fmt.Println("model")
@@ -37,5 +49,6 @@ func SupervisorRequest(w http.ResponseWriter, r *http.Request) {
 }
 
 func PingRequest(w http.ResponseWriter, _ *http.Request) {
+	log.Debugln("sample")
 	io.WriteString(w, "Pong!!!!!!!!!!!!!!!!!!!!!!\n")
 }
