@@ -20,6 +20,7 @@ func NewModel() {
 	http.HandleFunc("/", h1)
 	http.HandleFunc("/supervisor", SupervisorRequest)
 	http.HandleFunc("/agent", h3)
+	http.HandleFunc("/agent/ping", PingRequest)
 	http.ListenAndServe(":8080", nil)
 }
 
@@ -33,4 +34,8 @@ func SupervisorRequest(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Println(string(buf.Bytes()))
 	}
+}
+
+func PingRequest(w http.ResponseWriter, _ *http.Request) {
+	io.WriteString(w, "Pong!!!!!!!!!!!!!!!!!!!!!!\n")
 }
